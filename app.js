@@ -1,6 +1,18 @@
 const express = require('express');
 const fs = require('fs');
 const app = express();
+const cors = require('cors');
+
+app.use(cors())
+const allowOnlyMyDomain = (req, res, next) => {
+	if (req.get('origin') !== 'https://kayengxiong.blog') {
+		return res.status(403).send('Forbidden');
+	}
+	next();
+};
+
+app.use(allowOnlyMyDomain);
+
 
 app.get('/', (req, res) => {
 	res.sendFile(__dirname + '/index.html');
